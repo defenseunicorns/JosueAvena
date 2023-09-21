@@ -37,4 +37,5 @@ jobs:
         version: 3.30.1
     - name: Run Terraform Apply
       run: |
+        export TASK_X_REMOTE_TASKFILES=1
         task -y
