@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+includes:
+  test-templates: https://raw.githubusercontent.com/buzzdeploy/dd-task-ci-templates/initialize_repo/test/does-the-name-matter.yml
+  k3d: https://raw.githubusercontent.com/buzzdeploy/dd-task-ci-templates/initialize_repo/test/k3d-terraform.yml
+tasks:
+  default:
+    cmds:
+      - task: k3d
