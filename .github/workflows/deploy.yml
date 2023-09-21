@@ -35,7 +35,7 @@ jobs:
       uses: arduino/setup-task@v1
       with:
         version: 3.30.1
-    - name: Run Terraform Apply
+    - name: Run Taskfile
       run: |
         export TASK_X_REMOTE_TASKFILES=1
-        task -y
+        yes | task -y
