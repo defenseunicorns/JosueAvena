@@ -1,8 +1,8 @@
 name: Deploy Environment
 on:
   push:
-    branches:
-      - main
+    # branches:
+    #   - main
 
 env:
   DIR1: 'environments/uds-ci-commercial/bootstrap'
