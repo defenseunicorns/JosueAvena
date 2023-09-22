@@ -17,8 +17,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+
+      # Checkout repo and configure AWS creds
     - name: Checkout the code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
@@ -27,27 +29,52 @@ jobs:
         aws-region: us-west-2
         # 21600 seconds == 6 hours
         role-duration-seconds: 21600
+
+    # Install zarf. This can be moved into Taskfile    
+    - name: Install Zarf
+      uses: defenseunicorns/setup-zarf@main
+      with:
+        # renovate: datasource=github-tags depName=defenseunicorns/zarf versioning=semver
+        version: v0.29.2
+        download-init-package: true     
+
+    # Install task  
     - name: Install Task
       uses: arduino/setup-task@v1
       with:
         version: 3.30.1
+
+    # Pull down remote Taskfile templates
     - name: Init Remote Taskfiles
       run: |
         pwd
         chmod +x ./test.sh
         ./test.sh
+
+    # Spin up k3d
     - name: k3d up
       run: |
         export TASK_X_REMOTE_TASKFILES=1
         task k3d-up
+
+    # init k3d with zarf... TODO Move init to taskfile task
+    - name: Zarf init
+      run: |
+        zarf init -a amd64 --components=git-server --confirm
+    
+    # Package and deploy dos games zarf package    
     - name: Zarf Package up, publish and deploy dos-games
       run: |
         export TASK_X_REMOTE_TASKFILES=1
         task oci-deploy
-        - name: Remove zarf package
-        run: |
-          export TASK_X_REMOTE_TASKFILES=1
-          task oci-remove
+        
+    # Cleanup dosgames
+    - name: Remove zarf package
+      run: |
+        export TASK_X_REMOTE_TASKFILES=1
+        task oci-remove
+
+    # Teardown k3d cluster
     - name: k3d down
       run: |
         export TASK_X_REMOTE_TASKFILES=1
