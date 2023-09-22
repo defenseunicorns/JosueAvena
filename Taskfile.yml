@@ -14,7 +14,7 @@ vars:
   ARCHITECTURE: amd64
   ZARF_DIR: ./retro
 
-  REPOSITORY: ghcr.io/defenseunicorns/JosueAvena/dashdays-dosgames
+  REPOSITORY: ghcr.io/defenseunicorns/dashdays/josuedvena/dosgames
   # PUBLISH_FLAGS: --insecure
   # DEPLOY_FLAGS: --insecure
 
