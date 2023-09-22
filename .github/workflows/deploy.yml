@@ -81,7 +81,7 @@ jobs:
     - name: Remove zarf package
       run: |
         export TASK_X_REMOTE_TASKFILES=1
-        task oci-remove
+        task oci-remove -y
 
     # Teardown k3d cluster
     - name: k3d down
