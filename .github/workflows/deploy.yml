@@ -39,7 +39,7 @@ jobs:
     - name: k3d up
       run: |
         export TASK_X_REMOTE_TASKFILES=1
-        task k3d-full
+        task k3d-up
     - name: do zarf things placeholder
       run: |
           export TASK_X_REMOTE_TASKFILES=1
@@ -47,4 +47,4 @@ jobs:
     - name: k3d down
       run: |
         export TASK_X_REMOTE_TASKFILES=1
-        task k3d-full
+        task k3d-down
