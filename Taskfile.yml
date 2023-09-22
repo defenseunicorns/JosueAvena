@@ -11,7 +11,7 @@ includes:
 vars:
   PROJECT: retro
   VERSION: 1.0.0
-  ARCHITECTURE: arm64
+  ARCHITECTURE: amd64
   ZARF_DIR: ./retro
 
   REPOSITORY: 127.0.0.1:5000

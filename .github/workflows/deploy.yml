@@ -7,6 +7,7 @@ on:
 permissions:
     id-token: write
     contents: read
+    packages: write
 
 defaults:
   run:
@@ -44,6 +45,14 @@ jobs:
       with:
         version: 3.30.1
 
+    # Log into ghcr to publish the oci package
+    - name: Login to GHCR
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: dummy
+        password: ${{ secrets.GITHUB_TOKEN }}    
+
     # Pull down remote Taskfile templates
     - name: Init Remote Taskfiles
       run: |
@@ -67,7 +76,7 @@ jobs:
       run: |
         export TASK_X_REMOTE_TASKFILES=1
         task oci-deploy
-        
+
     # Cleanup dosgames
     - name: Remove zarf package
       run: |
@@ -76,6 +85,7 @@ jobs:
 
     # Teardown k3d cluster
     - name: k3d down
+      if: always()
       run: |
         export TASK_X_REMOTE_TASKFILES=1
         task k3d-down
