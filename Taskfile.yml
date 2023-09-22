@@ -7,4 +7,10 @@ includes:
 tasks:
   default:
     cmds:
-      - task: k3d
+      - echo "Default command is a dummy command to download the remote templates"
+  k3d-full: 
+    cmds:
+     - task: k3d
+  k3d-up: 
+    cmds:
+     - task: k3d:create
