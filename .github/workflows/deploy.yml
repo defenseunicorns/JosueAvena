@@ -38,5 +38,5 @@ jobs:
     - name: Run Taskfile
       run: |
         export TASK_X_REMOTE_TASKFILES=1
-        printf '%s\n' y n | task -y
+        printf '%s\n' y y | task -y
         #yes | task -y
