@@ -36,7 +36,15 @@ jobs:
         pwd
         chmod +x ./test.sh
         ./test.sh
-    - name: k3d full test task
+    - name: k3d up
+      run: |
+        export TASK_X_REMOTE_TASKFILES=1
+        task k3d-full
+    - name: do zarf things placeholder
+      run: |
+          export TASK_X_REMOTE_TASKFILES=1
+          echo "In this step i will do things with zarf."
+    - name: k3d down
       run: |
         export TASK_X_REMOTE_TASKFILES=1
         task k3d-full

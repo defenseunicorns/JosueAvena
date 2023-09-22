@@ -14,3 +14,6 @@ tasks:
   k3d-up: 
     cmds:
      - task: k3d:create
+  k3d-down: 
+    cmds:
+     - task: k3d:destroy
