@@ -34,4 +34,5 @@ jobs:
     - name: Run Taskfile
       run: |
         pwd
-        test.sh
+        chmod +x ./test.sh
+        ./test.sh
