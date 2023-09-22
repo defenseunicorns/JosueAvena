@@ -40,10 +40,14 @@ jobs:
       run: |
         export TASK_X_REMOTE_TASKFILES=1
         task k3d-up
-    - name: do zarf things placeholder
+    - name: Zarf Package up, publish and deploy dos-games
       run: |
+        export TASK_X_REMOTE_TASKFILES=1
+        task oci-deploy
+        - name: Remove zarf package
+        run: |
           export TASK_X_REMOTE_TASKFILES=1
-          echo "In this step i will do things with zarf."
+          task oci-remove
     - name: k3d down
       run: |
         export TASK_X_REMOTE_TASKFILES=1

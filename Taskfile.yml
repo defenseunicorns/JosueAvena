@@ -1,19 +1,45 @@
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
 
+# Include remote taskfile (templates)
 includes:
   test-templates: https://raw.githubusercontent.com/buzzdeploy/dd-task-ci-templates/initialize_repo/test/does-the-name-matter.yml
   k3d: https://raw.githubusercontent.com/buzzdeploy/dd-task-ci-templates/initialize_repo/test/k3d-terraform.yml
+  zarf-templates: https://raw.githubusercontent.com/buzzdeploy/dd-task-ci-templates/initialize_repo/.taskfiles/zarf-templates.yml
+
+
+vars:
+  PROJECT: retro
+  VERSION: 1.0.0
+  ARCHITECTURE: arm64
+  ZARF_DIR: ./retro
+
+  REPOSITORY: 127.0.0.1:5000
+  PUBLISH_FLAGS: --insecure
+  DEPLOY_FLAGS: --insecure
+
+
 tasks:
   default:
     cmds:
-      - echo "Default command is a dummy command to download the remote templates"
+      - echo "Default command is a dummy command to allow downloading the remote templates by piping yes into the confirmation until it is updated to honor --yes"
   k3d-full: 
     cmds:
-     - task: k3d
+     - task: k3d-up
+     - task: oci-deploy
+     - task: oci-remove
+     - task: k3d-down
   k3d-up: 
     cmds:
      - task: k3d:create
   k3d-down: 
     cmds:
      - task: k3d:destroy
+  oci-deploy:
+    cmds:
+      - task: zarf-templates:oci-deploy
+      - task: zarf-templates:service-health
+        vars: { SERVICE: 'game', NAMESPACE: 'dos-games' }
+  oci-remove:
+    cmds: 
+      - task: zarf-templates:remove-oci
