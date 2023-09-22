@@ -1,0 +1,70 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+tasks:
+  # Local tar.zst files
+  create:
+    dir: "{{ .ZARF_DIR }}"
+    cmds:
+      - zarf package create --confirm
+
+  deploy-tar:
+    dir: "{{ .ZARF_DIR }}"
+    cmds:
+      - zarf package deploy
+          zarf-package-{{ .PROJECT }}-{{ .ARCHITECTURE }}-{{ .VERSION }}.tar.zst
+          --confirm
+
+  remove-tar:
+    dir: "{{ .ZARF_DIR }}"
+    prompt: Are you sure you want to remove the '{{ .PROJECT }}' Zarf package?
+    cmds:
+      - zarf package remove
+          zarf-package-{{ .PROJECT }}-{{ .ARCHITECTURE }}-{{ .VERSION }}.tar.zst
+          --confirm
+  
+  # OCI
+  publish:
+    dir: "{{ .ZARF_DIR }}"
+    cmds:
+      - zarf package publish
+        zarf-package-{{ .PROJECT }}-{{ .ARCHITECTURE }}-{{ .VERSION }}.tar.zst
+        oci://{{ .REPOSITORY }}
+        {{ .PUBLISH_FLAGS }}
+
+  deploy-oci:
+    dir: "{{ .ZARF_DIR }}"
+    cmds:
+      - zarf package deploy
+          oci://{{ .REPOSITORY }}/{{ .PROJECT }}:{{ .VERSION }}-{{ .ARCHITECTURE }}
+          --confirm
+          {{ .DEPLOY_FLAGS}}
+
+  remove-oci:
+    dir: "{{ .ZARF_DIR }}"
+    prompt: Are you sure you want to remove the '{{ .PROJECT }}' Zarf package?
+    cmds:
+      - zarf package remove
+          oci://{{ .REPOSITORY }}/{{ .PROJECT }}:{{ .VERSION }}-{{ .ARCHITECTURE }}
+          --confirm
+          {{ .DEPLOY_FLAGS}}
+
+  # Health Check Tools
+  service-health:
+    dir: "{{ .ZARF_DIR }}"
+    cmds:
+      - zarf tools wait-for svc {{ .SERVICE }} -n {{ .NAMESPACE }}
+
+  # META
+  local-deploy:
+    dir: "{{ .ZARF_DIR }}"
+    cmds:
+      - task: create
+      - task: deploy-tar
+
+  oci-deploy:
+    dir: "{{ .ZARF_DIR }}"
+    cmds:
+      - task: create
+      - task: publish
+      - task: deploy-oci

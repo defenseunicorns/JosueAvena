@@ -3,9 +3,9 @@ version: '3'
 
 # Include remote taskfile (templates)
 includes:
-  test-templates: https://raw.githubusercontent.com/buzzdeploy/dd-task-ci-templates/initialize_repo/test/does-the-name-matter.yml
-  k3d: https://raw.githubusercontent.com/buzzdeploy/dd-task-ci-templates/initialize_repo/test/k3d-terraform.yml
-  zarf-templates: https://raw.githubusercontent.com/buzzdeploy/dd-task-ci-templates/initialize_repo/.taskfiles/zarf-templates.yml
+
+  k3d: https://raw.githubusercontent.com/defenseunicorns/JosueAvena/main/.taskfiles/k3d-terraform.yaml
+  zarf: https://raw.githubusercontent.com/defenseunicorns/JosueAvena/main/.taskfiles/zarf-templates.yaml
 
 
 vars:
@@ -37,9 +37,9 @@ tasks:
      - task: k3d:destroy
   oci-deploy:
     cmds:
-      - task: zarf-templates:oci-deploy
-      - task: zarf-templates:service-health
+      - task: zarf:oci-deploy
+      - task: zarf:service-health
         vars: { SERVICE: 'game', NAMESPACE: 'dos-games' }
   oci-remove:
     cmds: 
-      - task: zarf-templates:remove-oci
+      - task: zarf:remove-oci

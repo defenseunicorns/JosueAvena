@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+# Global Variables
+vars:
+  UNIQUE_ID: zam
+  REF: dd_test
+  REPO_URL: "https://github.com/defenseunicorns/uds-aws-ci-k3d"
+  WORK_DIR: "builds"
+  TF_DIR: "terraform"
+  # Dynamic Global variable
+  CLONE_DIR:
+    sh: basename "{{.REPO_URL}}"
+
+# Global ENV
+env:
+  ID: "{{.UNIQUE_ID}}"
+
+
+tasks:
+  # default task pulls down the k3d terraform repo (currently used by dubbd as a github action) 
+  # and runs the terraform with a defered cleanup that may or may not be approriate for a real usecase. 
+  default:
+    requires:
+      vars: [REF, REPO_URL, ID]
+    deps:
+    - task: checkout
+    cmds:
+      - defer: { task: destroy }
+      - mkdir -p ./builds
+      - task: create
+
+  create:
+    deps:
+    - task: checkout
+    requires:
+      vars: [REF, REPO_URL, ID]
+    dir: "{{.WORK_DIR}}/{{ .CLONE_DIR }}/{{ .TF_DIR }}"
+    cmds:
+     - ./create-cluster.sh
+
+  destroy:
+    deps:
+      - task: checkout
+    requires:
+      vars: [REF, REPO_URL, ID]
+    dir: "{{.WORK_DIR}}/{{ .CLONE_DIR }}/{{ .TF_DIR }}"
+    cmds:
+     - ./teardown-cluster.sh
+
+  # Checkout source repo
+  checkout:
+    requires:
+      vars: [REF, REPO_URL, ID]
+    status:
+      - test -d "{{ .CLONE_DIR }}"
+    dir: "{{.WORK_DIR}}"
+    cmds:
+     - task: cleanup
+     - git clone -b {{.REF}} {{.REPO_URL}}
+
+
+  # Cleanup build directory
+  cleanup:
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds: 
+      - rm -rf "{{.USER_WORKING_DIR}}/{{.WORK_DIR}}"
+      - mkdir -p "{{.USER_WORKING_DIR}}/{{.WORK_DIR}}"
