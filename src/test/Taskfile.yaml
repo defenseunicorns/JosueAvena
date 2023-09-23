@@ -1,0 +1,28 @@
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task: hello-world
+      - task: current-date
+      - task: list-files
+      - task: test-error-behavior
+  hello-world:
+    desc: Echoes "Hello, world!"
+    cmds:
+      - echo "Hello, world!"
+
+  current-date:
+    desc: Shows the current date and time
+    cmds:
+      - date
+
+  list-files:
+    desc: Lists all files in the current directory
+    cmds:
+      - ls -l
+
+  test-error-behavior:
+    desc: Lists all files in the current directory
+    cmds:
+      - fake_command
