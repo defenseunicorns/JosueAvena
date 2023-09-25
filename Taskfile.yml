@@ -58,4 +58,4 @@ tasks:
         vars: { SERVICE: 'game', NAMESPACE: 'dos-games' }
   tar-remove:
     cmds:
-      - task: zarf:remote-tar
+      - task: zarf:remove-tar
