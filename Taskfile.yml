@@ -4,8 +4,9 @@ version: '3'
 # Include remote taskfile (templates)
 includes:
 
-  k3d: https://raw.githubusercontent.com/defenseunicorns/JosueAvena/main/.taskfiles/k3d-terraform.yaml
-  zarf: https://raw.githubusercontent.com/defenseunicorns/JosueAvena/main/.taskfiles/zarf-templates.yaml
+  k3d: https://raw.githubusercontent.com/defenseunicorns/JosueAvena/add-local/.taskfiles/k3d-terraform.yaml
+  k3d-local: https://raw.githubusercontent.com/defenseunicorns/JosueAvena/add-local/.taskfiles/k3d-local.yaml
+  zarf: https://raw.githubusercontent.com/defenseunicorns/JosueAvena/add-local/.taskfiles/zarf-templates.yaml
 
 
 vars:
@@ -15,26 +16,33 @@ vars:
   ZARF_DIR: ./retro
 
   REPOSITORY: ghcr.io/defenseunicorns/dashdays/josuedvena/dosgames
-  # PUBLISH_FLAGS: --insecure
-  # DEPLOY_FLAGS: --insecure
+  PUBLISH_FLAGS: 
+  DEPLOY_FLAGS: 
 
 
 tasks:
   default:
     cmds:
       - echo "Default command is a dummy command to allow downloading the remote templates by piping yes into the confirmation until it is updated to honor --yes"
-  k3d-full: 
+  aws-k3d-full: 
     cmds:
-     - task: k3d-up
-     - task: oci-deploy
-     - task: oci-remove
-     - task: k3d-down
-  k3d-up: 
+      - task: k3d-up
+      - task: oci-deploy
+      - task: oci-remove
+      - task: k3d-down
+  aws-k3d-up: 
     cmds:
-     - task: k3d:create
-  k3d-down: 
+      - task: k3d:create
+  aws-k3d-down: 
     cmds:
-     - task: k3d:destroy
+      - task: k3d:destroy
+  local-k3d-up:
+    cmds:
+      - task: k3d-local:create
+      - task: zarf:init
+  local-k3d-down:
+    cmds:
+      - task: k3d-local-destroy
   oci-deploy:
     cmds:
       - task: zarf:oci-deploy
@@ -43,3 +51,11 @@ tasks:
   oci-remove:
     cmds: 
       - task: zarf:remove-oci
+  tar-deploy:
+    cmds:
+      - task: zarf:local-deploy
+      - task: zarf:service-health
+        vars: { SERVICE: 'game', NAMESPACE: 'dos-games' }
+  tar-remove:
+    cmds:
+      - task: zarf:remote-tar

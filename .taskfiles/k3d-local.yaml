@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+tasks:
+  create:
+    cmds:
+      - k3d cluster create taskfile
+  
+  delete:
+    cmds:
+      - k3d cluster delete taskfile

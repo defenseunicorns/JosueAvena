@@ -1,0 +1,4 @@
+builds/
+.task/
+*.zst
+.DS_Store

@@ -2,6 +2,11 @@
 version: '3'
 
 tasks:
+  # Init
+  init:
+    cmds:
+      - zarf package init --confirm 
+
   # Local tar.zst files
   create:
     dir: "{{ .ZARF_DIR }}"

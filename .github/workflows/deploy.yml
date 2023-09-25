@@ -64,7 +64,7 @@ jobs:
     - name: k3d up
       run: |
         export TASK_X_REMOTE_TASKFILES=1
-        task k3d-up
+        task aws-k3d-up
 
     # init k3d with zarf... TODO Move init to taskfile task
     - name: Zarf init
@@ -88,4 +88,4 @@ jobs:
       if: always()
       run: |
         export TASK_X_REMOTE_TASKFILES=1
-        task k3d-down
+        task aws-k3d-down
