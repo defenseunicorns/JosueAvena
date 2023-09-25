@@ -42,7 +42,7 @@ tasks:
       - task: zarf:init
   local-k3d-down:
     cmds:
-      - task: k3d-local-destroy
+      - task: k3d-local:destroy
   oci-deploy:
     cmds:
       - task: zarf:oci-deploy

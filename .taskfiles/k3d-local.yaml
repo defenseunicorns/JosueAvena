@@ -6,6 +6,6 @@ tasks:
     cmds:
       - k3d cluster create taskfile
   
-  delete:
+  destroy:
     cmds:
       - k3d cluster delete taskfile
