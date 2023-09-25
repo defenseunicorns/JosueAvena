@@ -5,7 +5,7 @@ tasks:
   # Init
   init:
     cmds:
-      - zarf package init --confirm 
+      - zarf init --confirm 
 
   # Local tar.zst files
   create:
