@@ -6,7 +6,7 @@ tasks:
   create:
     dir: "{{ .ZARF_DIR }}"
     cmds:
-      - zarf package create --confirm
+      - zarf package create -a {{ .ARCHITECTURE }} --confirm
 
   deploy-tar:
     dir: "{{ .ZARF_DIR }}"

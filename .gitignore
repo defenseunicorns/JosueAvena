@@ -1,2 +1,4 @@
 src/main
 .task/
+retro/zarf-package-retro-arm64-1.0.0.tar.zst
+builds/*
